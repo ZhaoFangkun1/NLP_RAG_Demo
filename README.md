@@ -48,6 +48,8 @@ cd code
 sh crag.sh
 python metric.py
 ```
+5. 鼓励进行模型训练或流程上的改进。
+
 ## 附加说明 
 1. 项目主体来自[Retrieval-Augmented-Generation-Intro-Project](https://github.com/HenryHengLUO/Retrieval-Augmented-Generation-Intro-Project/blob/main/README.md),本项目对llama_index的最新版本进行了适配。
 2. 一些免费的API申请地址如：[百度千帆](https://console.bce.baidu.com/qianfan/overview)、[阿里云](https://help.aliyun.com/zh/dashscope/developer-reference/?spm=a2c4g.11186623.0.0.644e9b6em7thMV)；当前代码中的demo使用的是百度千帆提供的Yi-34B-Chat的接口(限时免费)，需要自行申请API Key和Secret Key，并在代码中相应位置替换。
