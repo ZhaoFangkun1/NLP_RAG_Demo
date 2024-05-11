@@ -18,8 +18,8 @@ from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from model_response import MyApiLLM, MyLocalLLM
 
 
-def build_automerging_index(documents, save_dir="merging_index", chunk_sizes=None):
-    chunk_sizes = chunk_sizes or [2048, 512, 128]
+def build_automerging_index(documents, save_dir="merge_index", chunk_sizes=None):
+    chunk_sizes = chunk_sizes or [1024, 256, 64]
     node_parser = HierarchicalNodeParser.from_defaults(chunk_sizes=chunk_sizes)
     nodes = node_parser.get_nodes_from_documents(documents)
     leaf_nodes = get_leaf_nodes(nodes)
@@ -40,7 +40,7 @@ def main(args):
     base_retriever = index.as_retriever(similarity_top_k=args.similarity_top_k)
     retriever = AutoMergingRetriever(base_retriever, index.storage_context, verbose=True)
     auto_merging_engine = RetrieverQueryEngine.from_args(retriever, node_postprocessors=[Settings.rerank_model])
-    auto_merging_response = auto_merging_engine.query("Who is the beautiful person in Hong Kong")
+    auto_merging_response = auto_merging_engine.query("When did Musk establish xAI")
     print('auto_merging_response:', auto_merging_response)
 
 
@@ -54,7 +54,7 @@ if __name__ == '__main__':
     parser.add_argument('--llm_model_path', type=str, help='local llm model path', default='../qwen1.5-0.5B')
     parser.add_argument('--embedding_model_path', type=str, help='local embedding model path',default='../BAAI/bge-small-en-v1.5')
     parser.add_argument('--similarity_top_k', type=int, default=12)
-    parser.add_argument('--data_path', type=str, help='local data path', default='../data/Henry.txt')
+    parser.add_argument('--data_path', type=str, help='local data path', default='../data/Elon.txt')
     parser.add_argument('--save_path', type=str, help='chunk save path', default='./merge_index')
     parser.add_argument('--rerank_model_path', type=str, help='local rerank model path', default='../BAAI/bge-reranker-base')
     parser.add_argument('--rerank_top_n', type=int, default=2)

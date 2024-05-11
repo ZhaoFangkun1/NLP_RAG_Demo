@@ -71,7 +71,7 @@ if __name__ == '__main__':
     parser.add_argument('--embedding_model_path', type=str, help='local embedding model path',
                         default='../BAAI/bge-small-en-v1.5')
     parser.add_argument('--similarity_top_k', type=int, default=12)
-    parser.add_argument('--data_path', type=str, help='local data path', default='../data/Henry.txt')
+    parser.add_argument('--data_path', type=str, help='local data path', default='../data/Elon.txt')
     parser.add_argument('--save_path', type=str, help='chunk save path', default='./merging_index')
     parser.add_argument('--rerank_model_path', type=str, help='local rerank model path',
                         default='../BAAI/bge-reranker-base')

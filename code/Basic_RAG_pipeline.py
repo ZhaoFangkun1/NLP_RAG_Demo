@@ -27,19 +27,12 @@ def main(args):
     query_engine = index.as_query_engine()
     # 6.查询
     response = query_engine.query(
-        "Who is the pretty boy in Hong Kong?"
+        "When did Musk establish xAI"
     )
     print(str(response))
-    response = query_engine.query(
-        "香港谁最帅?"
-    )
-    print(str(response))
-    response = query_engine.query(
-        "Who is the beautiful person in Hong Kong?"
-    )
-    print(str(response))
-    print(response.source_nodes[0].get_text())
-    print(response.source_nodes[1].get_text())
+    print(response.source_nodes[0].text)
+    print(response.source_nodes[1].text)
+
 
 
 if __name__ == '__main__':
@@ -56,7 +49,7 @@ if __name__ == '__main__':
     parser.add_argument('--embedding_model_path', type=str, help='local embedding model path',
                         default='../BAAI/bge-small-en-v1.5')
 
-    parser.add_argument('--data_path', type=str, help='local data path', default='../data/Henry.txt')
+    parser.add_argument('--data_path', type=str, help='local data path', default='../data/Elon.txt')
     parser.add_argument('--chunk_size', type=int, default=64, help='chunk size')
     parser.add_argument('--chunk_overlap', type=int, default=2, help='chunk overlap')
     args = parser.parse_args()

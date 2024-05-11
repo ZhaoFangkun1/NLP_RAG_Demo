@@ -4,4 +4,4 @@ python crag.py \
 --secret_key 申请的secret_key \
 --embedding_model_path ../BAAI/bge-small-en-v1.5 \
 --rerank_model_path ../BAAI/bge-reranker-base \
---data_path '../data/Henry.txt'
+--data_path '../data/Elon.txt'
