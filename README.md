@@ -54,7 +54,7 @@ python metric.py
 3. 鼓励尝试更精妙的chunk策略,检索召回以及重排算法。
 4. 如需要进行模型训练，可自行将CRAG全量训练集进行切分
    - bge检索以及重排模型的微调, 可参考 https://github.com/FlagOpen/FlagEmbedding/blob/master/examples/finetune/README.md
-     - 微调时需要构造query对应的正负例,CRAG数据集并未给出query对应的正例,因此需要设计方案构造正例：除人工标注外还可通过prompt LLM进行query和chunk的相关性判定
+     - 微调时需要构造query对应的正负例,CRAG数据集并未给出query对应的正例,因此需要设计方案构造正例：除人工标注外还可通过prompt LLM进行query和chunk的相关性判定 
    - LLM的further-pretrain以及sft,对训练框架不做限制,可参考[llama-factory](https://github.com/hiyouga/LLaMA-Factory),[megatron-lm](https://github.com/NVIDIA/Megatron-LM)框架，以及阿里进行二次封装之后的[Pai-Megatron-Patch](https://github.com/alibaba/Pai-Megatron-Patch)等框架
 5. AutoMergingRetrieval的详细介绍可参考 https://zhaozhiming.github.io/2024/03/19/auto-merging-rag/
 
