@@ -23,7 +23,7 @@
   - `metric.py`: 评测脚本，计算模型生成内容与标答的BLEU和rouge-l指标
 - **data**: 实验所需的语料，包括
   - `Elon.txt`: 示例文件 `Elon.txt`
-  - [KDD CUP 2024 CRAG:Comprehensive Rag Benchmark](https://www.aicrowd.com/challenges/meta-comprehensive-rag-benchmark-kdd-cup-2024)数据，每条数据包含**query**、**可能和query相关的五个网页内容**(为方便使用已经进行了简单的html标签去除)、**query对应的答案**。提供CRAG全量训练集2735条数据和其子集，如有训练需求可自行将CRAG全量训练集切分作为你自己的训练集和验证集。本仓库提供了200条训练子集，全量2735条数据下载地址为 https://www.modelscope.cn/datasets/zhaofangkun/CRAG_cleaned/summary
+  - [KDD CUP 2024 CRAG:Comprehensive Rag Benchmark](https://www.aicrowd.com/challenges/meta-comprehensive-rag-benchmark-kdd-cup-2024)数据，每条数据包含**query**、**可能和query相关的五个网页内容**(为方便使用已经进行了简单的html标签去除)、**query对应的答案**。提供CRAG全量训练集2735条数据和其子集，如有训练需求可自行将CRAG全量训练集切分作为你自己的训练集和验证集。本仓库提供了200条训练子集，全量未去除html标签和清洗后的2735条数据两种版本下载地址为 https://www.modelscope.cn/datasets/zhaofangkun/CRAG_cleaned/summary
 
 ## Getting Started 🚀
 
