@@ -1,0 +1,3 @@
+Hello everyone,
+
+This dataset, named BGE.jsonl, originates from the CRAG dataset. It has undergone basic HTML text cleaning to create the version named crag_data_2735.jsonl. Through manual annotation, prompting with pre-trained language models, and other data cleaning methods, I have constructed positive and negative sample chunks for each query. These are intended for use in fine-tuning BGE models. This dataset is strictly limited to use for NLP coursework and is not permitted for any other purposes. If you encounter any issues with the quality of the annotations during use, please contact me. I appreciate the contributions of everyone involved in the creation and support of this dataset.
