@@ -60,4 +60,6 @@ python metric.py
    - 微调时需要构造query对应的chunk正负样例，但是CRAG数据集并未给出query对应的chunk正例（只给出了与每个query可能相关的网页、每个query对应的答案），因此需要设计方案为query构造正例（除人工标注外，还可通过prompt LLM进行query和chunk的相关性判定）
 3. 对LLM进行进一步预训练或微调：
    - 根据自己的算力情况，使用给定的CRAG数据对LLM做进一步的预训练或有监督微调
+     - 我们在[这里](https://drive.google.com/drive/folders/1jJzl06l1scc_Ireez7yebPQsdMexgq60?usp=sharing)提供了通过调整格式的CRAG_2735数据集在ChatGLM3-6B模型上微调的**Lora权重**，有兴趣和充足算力的同学可以下载该权重文件并与[原始的glm权重文件](https://huggingface.co/THUDM/chatglm3-6b)放置在同一个目录下，测试微调模型的性能，同时欢迎提出修改建议！
+       - 为了使用方便，我们同时更新了`model_response.py`，如要使用lora权重进行推理，只需要在`MyLocalLLM`类的初始化方法中使用`LocalPeftModel`类即可。
    - 对使用的LLM框架不做限制，可参考[llama-factory](https://github.com/hiyouga/LLaMA-Factory),[megatron-lm](https://github.com/NVIDIA/Megatron-LM)框架，以及阿里进行二次封装之后的[Pai-Megatron-Patch](https://github.com/alibaba/Pai-Megatron-Patch)框架
