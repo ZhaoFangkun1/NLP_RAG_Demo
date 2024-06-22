@@ -5,9 +5,11 @@
 @Author  ：zfk
 @Date    ：2024/5/8 11:45
 """
-import requests
 import json
+import re
 from typing import Any
+
+import requests
 from llama_index.core.llms import (
     CustomLLM,
     CompletionResponse,
@@ -15,6 +17,7 @@ from llama_index.core.llms import (
     LLMMetadata,
 )
 from llama_index.core.llms.callbacks import llm_completion_callback
+from peft import AutoPeftModelForCausalLM
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
 
@@ -23,7 +26,8 @@ class ApiModel:
         self.api_key = api_key
         self.secret_key = secret_key
         self.access_token = self.get_access_token()
-        self.Yi_34b_chat_url = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/yi_34b_chat?access_token=" + self.access_token
+        self.Yi_34b_chat_url = ("https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/yi_34b_chat"
+                                "?access_token=") + self.access_token
 
     def get_access_token(self):
         """
@@ -38,7 +42,7 @@ class ApiModel:
         response = requests.request("POST", url, headers=headers, data=payload)
         return response.json().get("access_token")
 
-    def chat(self, prompt, top_p=0.5, top_k=5, temperature=1.0, penalty_score=1, ):
+    def chat(self, prompt, top_p=0.5, top_k=5, temperature=1.0, penalty_score=1):
         payload = json.dumps({
             "messages": [
                 {
@@ -46,12 +50,34 @@ class ApiModel:
                     "content": prompt
                 }
             ],
-            'top_p': 0.5, 'top_k': 5, 'temperature': 1.0, 'penalty_score': 1
+            'top_p': top_p,
+            'top_k': top_k,
+            'temperature': temperature,
+            'penalty_score': penalty_score
         })
         headers = {'Content-Type': 'application/json'}
         response = requests.request("POST", self.Yi_34b_chat_url, headers=headers, data=payload)
-        print(response.json())
         return response.json()['result']
+
+
+def remove_special_tokens(text):
+    # 去除特殊token的正则表达式
+    special_tokens = re.compile(r'\[gMASK]|\bsop\b')
+    return special_tokens.sub('', text).strip()
+
+
+class LocalPeftModel:
+    def __init__(self, peft_model_path="weight/lora_2"):
+        self.model = AutoPeftModelForCausalLM.from_pretrained(peft_model_path, trust_remote_code=True)
+        self.tokenizer = AutoTokenizer.from_pretrained("/data/zzy/Models/ChatGLM3-6B", trust_remote_code=True)
+        self.model = self.model.to("cuda").eval()
+
+    def chat(self, prompt):
+        inputs = self.tokenizer.encode(prompt, return_tensors='pt').cuda()
+        outputs = self.model.generate(inputs, max_new_tokens=256)
+        response = self.tokenizer.decode(outputs[0][inputs.size(1):], skip_special_tokens=True)
+        response = remove_special_tokens(response)
+        return response
 
 
 class LocalModel:
@@ -75,7 +101,8 @@ class MyLocalLLM(CustomLLM):
 
     def __init__(self, pretrained_model_name_or_path):
         super().__init__()
-        self.model = LocalModel(pretrained_model_name_or_path)
+        # self.model = MyLocalLLM(pretrained_model_name_or_path)
+        self.model = LocalPeftModel(pretrained_model_name_or_path)
 
     @property
     def metadata(self) -> LLMMetadata:
@@ -89,21 +116,14 @@ class MyLocalLLM(CustomLLM):
 
     @llm_completion_callback()  # 回调函数
     def complete(self, prompt: str, **kwargs: Any) -> CompletionResponse:
-        # 完成函数
-        inputs = self.tokenizer.encode(prompt, return_tensors='pt').cuda()
-        outputs = self.model.generate(inputs, max_length=self.num_output)
-        response = self.tokenizer.decode(outputs[0])
+        response = self.model.chat(prompt)
         return CompletionResponse(text=response)
 
     @llm_completion_callback()
     def stream_complete(
             self, prompt: str, **kwargs: Any
     ) -> CompletionResponseGen:
-        # 流式完成函数
-        print("流式完成函数")
-        inputs = self.tokenizer.encode(prompt, return_tensors='pt').cuda()  # GPU方式
-        outputs = self.model.generate(inputs, max_length=self.num_output)
-        response = self.tokenizer.decode(outputs[0])
+        response = self.model.chat(prompt)
         for token in response:
             yield CompletionResponse(text=token, delta=token)
 
